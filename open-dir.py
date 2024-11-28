@@ -42,15 +42,16 @@ def process_dir(top_dir):
     body {
         font-family: sans-serif;
         text-rendering: optimizespeed;
-        background-color: #ffffff;
+        background-color: #000000;
+        color: #ffffff;
     }
     a {
-        color: #006ed3;
+        color: #00ffff;
         text-decoration: none;
     }
     a:hover,
     h1 a:hover {
-        color: #319cff;
+        color: #ffffff;
     }
     header,
     #summary {
@@ -68,7 +69,6 @@ def process_dir(top_dir):
     header {
         padding-top: 25px;
         padding-bottom: 15px;
-        background-color: #f2f2f2;
     }
     h1 {
         font-size: 20px;
@@ -76,10 +76,10 @@ def process_dir(top_dir):
         white-space: nowrap;
         overflow-x: hidden;
         text-overflow: ellipsis;
-        color: #999;
+        color: #ffffff;
     }
     h1 a {
-        color: #000;
+        color: #ffffff;
         margin: 0 4px;
     }
     h1 a:hover {
@@ -110,10 +110,10 @@ def process_dir(top_dir):
         border-collapse: collapse;
     }
     tr {
-        border-bottom: 1px dashed #dadada;
+        border-bottom: 1px dashed #4a4a4a;
     }
     tbody tr:hover {
-        background-color: #ffffec;
+        background-color: #111111;
     }
     th,
     td {
@@ -187,7 +187,7 @@ def process_dir(top_dir):
             text-align: right;
         }
         h1 {
-            color: #000;
+            color: #ffffff;
         }
         h1 a {
             margin: 0;
@@ -198,6 +198,8 @@ def process_dir(top_dir):
     }
     </style>
 </head>
+
+
 <body>
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="0" width="0" style="position: absolute;">
     <defs>
@@ -235,6 +237,179 @@ def process_dir(top_dir):
         </g>
     </defs>
     </svg>
+
+<style>
+    .navigation-bar {
+        margin-top: 20px;
+        margin-right: 10px;
+    }
+
+    .navigation-bar ul {
+        cursor: default;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+        justify-content: right;
+        display: flex;
+        overflow-x: visible;
+    }
+
+    .navigation-bar li {
+        margin-right: 0px;
+    }
+
+    .navigation-bar li.icon a {
+        display: block;
+        padding: 10px;
+        border: 2px solid grey;
+        border-radius: 0px;
+        margin-right: -2px;
+        display: inline;
+        float: left;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+    }
+
+    .navigation-bar li.icon a:hover {
+        background-color: grey;
+    }
+
+    .navigation-bar li.icon a span {
+        margin-right: 5px;
+        padding: 0px;
+    }
+</style>
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+
+<!-- Navigation -->
+<div class="navigation-bar">
+  <!-- Navigation -->
+  <ul>
+    <!-- Home -->
+    <li class="icon">
+      <a href="https://dorianb.net">
+        <span class="fa fa-home"></span>
+        Home
+      </a>
+    </li>
+
+    <!-- Blog -->
+    <li class="icon">
+      <a href="https://dorianb.net/blog">
+        <span class="fa fa-book"></span>
+        Blog
+      </a>
+    </li>
+
+    <!-- Talks -->
+    <li class="icon">
+      <a href="https://dorianb.net/talks">
+        <span class="fa fa-solid fa-comment"></span>
+        Talks
+      </a>
+    </li>
+
+    <!-- Degate -->
+    <li class="icon">
+      <a href="https://www.degate.org">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <img
+            style="width: 20px; height: auto"
+            src="https://raw.githubusercontent.com/DegateCommunity/Degate/refs/heads/develop/res/degate_logo.png"
+            alt="Degate"
+          />
+          &nbsp; Degate
+        </div>
+      </a>
+    </li>
+
+    <!-- Toolbox -->
+    <li class="icon">
+      <a href="https://dorianb.net/toolbox">
+        <span class="fa fa-archive"></span>
+        Toolbox
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+<style>
+    .star{display: block; background-color: #fff; position: absolute; border-radius: 100%; animation-timing-function: linear; animation-iteration-count: infinite;}
+
+    @keyframes move_right {
+       from { transform: rotate(0deg) translateX(8px) rotate(0deg); }
+        to   { transform: rotate(360deg) translateX(8px) rotate(-360deg); }
+    }
+
+    @keyframes move_left {
+       from { transform: rotate(0deg) translateX(8px) rotate(0deg); }
+        to   { transform: rotate(-360deg) translateX(8px) rotate(360deg); }
+    }
+</style>
+
+<script>
+    /**
+     * Generates a random number between a given range (min and max).
+     * @param {number} min - The minimum value for the random number.
+     * @param {number} max - The maximum value for the random number.
+     * @return {number} A random number between min and max (inclusive).
+     */
+    var randomNumber = function(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    /**
+     * Holds the number of stars to be created.
+     */
+    var numberOfStars = randomNumber(50, 350);
+
+    /**
+     * Creates stars with random positions, sizes, and animation directions.
+     */
+    var createStars = function() {
+        /**
+         * Holds the initial star rotation direction.
+         */
+        var starRotation = 'move_right;';
+
+        var body = document.body,
+            html = document.documentElement;
+
+        var height = Math.max(body.scrollHeight, body.offsetHeight, 
+                              html.clientHeight, html.scrollHeight, html.offsetHeight);
+
+        // Loop through the number of stars to be created
+        var stars = "";
+        for (var i = 0; i < numberOfStars; i++) {
+            // Switch the rotation direction for each star
+            var rotation = (starRotation === 'move_right;' ? 'move_left;' : 'move_right;');
+
+            // Generate random values for star's position, size, and animation duration
+            var starTop = randomNumber(0, height);
+                var starLeft = randomNumber(0, window.innerWidth);
+                var starRadius = randomNumber(0, 4);
+                var starDuration = randomNumber(6, 16);
+
+                // Create a new star with the generated values and add it to the body of the document
+                stars += "<div class='star' style='top: " + starTop + "px; left: " + starLeft + "px; width: " + starRadius + "px; height: " + starRadius + "px; " +
+                    "animation-name:" + rotation + "; animation-duration: " + starDuration + "s;z-index: -1;'></div>";
+            }
+            document.body.innerHTML += "<div id='stars'>" + stars + "</div>";
+        };
+
+        // Create stars
+        createStars();    
+    </script>
+    
 <header>
     <h1>"""
                      f'{path_top_dir.name}'
