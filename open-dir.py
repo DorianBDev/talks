@@ -241,7 +241,11 @@ def process_dir(top_dir):
 <style>
     .navigation-bar {
         margin-top: 20px;
-        margin-right: 10px;
+        margin-right: 8px;
+        font-family: "Droid Sans", Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 18.4px;
     }
 
     .navigation-bar ul {
@@ -312,22 +316,6 @@ def process_dir(top_dir):
       <a href="https://dorianb.net/talks">
         <span class="fa fa-solid fa-comment"></span>
         Talks
-      </a>
-    </li>
-
-    <!-- Degate -->
-    <li class="icon">
-      <a href="https://www.degate.org">
-        <div
-          style="display: flex; justify-content: center; align-items: center"
-        >
-          <img
-            style="width: 20px; height: auto"
-            src="https://raw.githubusercontent.com/DegateCommunity/Degate/refs/heads/develop/res/degate_logo.png"
-            alt="Degate"
-          />
-          &nbsp; Degate
-        </div>
       </a>
     </li>
 
