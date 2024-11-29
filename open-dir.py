@@ -172,9 +172,6 @@ def process_dir(top_dir):
         display: block; 
     } 
     @media (max-width: 600px) {
-        * {
-            font-size: 1.06rem;
-        }
         .hideable {
             display: none;
         }
