@@ -32,11 +32,19 @@ def process_dir(top_dir):
         print('cannot create file %s %s' % (index_path, e))
         return
 
+    path_top_dir_parents = path_top_dir.parents
+    path_format = "/ <a style='text-decoration: underline;' href='https://dorianb.net/talks/'>Talks</a> "
+    for parent in reversed(path_top_dir_parents):
+        if parent.name != "":
+            path_format += f"/<a style='text-decoration: underline;' href='https://dorianb.net/talks/{parent}'>{parent.name}</a>"
+    path_format += f"/<a style='text-decoration: underline;' href='https://dorianb.net/talks/{path_top_dir}'>{path_top_dir.name}</a>"
+    
     index_file.write("""<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorian B. Talks</title>
     <style>
     * { padding: 0; margin: 0; }
     body {
@@ -397,7 +405,7 @@ def process_dir(top_dir):
     
 <header>
     <h1>"""
-                     f'{path_top_dir.name}'
+                     f'{path_format}'
                      """</h1>
                  </header>
                  <main>
