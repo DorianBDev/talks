@@ -323,14 +323,6 @@ def process_dir(top_dir):
         Talks
       </a>
     </li>
-
-    <!-- Toolbox -->
-    <li class="icon">
-      <a href="https://dorianb.net/toolbox">
-        <span class="fa fa-archive"></span>
-        Toolbox
-      </a>
-    </li>
   </ul>
 </div>
 
