@@ -394,7 +394,335 @@ def process_dir(top_dir):
         // Create stars
         createStars();    
     </script>
+
+    <script>
+	// ============================================================================
+	// Configuration
+	// ============================================================================
+
+	const GRADIENTS = {
+	  poly1: {
+	    from: '#0e3158',
+	    to: '#091144',
+	    direction: 'to right',
+	  },
+	  poly2: {
+	    from: '#154984',
+	    to: '#060b2d',
+	    direction: 'to left',
+	  },
+	  poly3: {
+	    from: '#002b33',
+	    to: '#007380',
+	    direction: 'to top',
+	    opacity: 0.2,
+	  },
+	};
+
+	const POLYGON_COUNTS = {
+	  poly1: 10,
+	  poly2: 6,
+	  poly3: 3,
+	};
+
+	const DISTRIBUTION_SETTINGS = {
+	  overflow: 0.3,
+	  disturb: 0.3,
+	  disturbChance: 0.3,
+	};
+
+	const ANIMATION = {
+	  blur: 70, // px
+	  transitionDuration: 3.5, // seconds
+	};
+
+	// ============================================================================
+	// Configuration (can be modified)
+	// ============================================================================
+
+	let config = {
+	  distribution: 'full',
+	  opacity: 0.2,
+	  hue: 0,
+	};
+
+	// ============================================================================
+	// Distribution Logic
+	// ============================================================================
+
+	function distributionToLimits(distribution) {
+	  const min = -0.2;
+	  const max = 1.2;
+	  let x = [min, max];
+	  let y = [min, max];
+
+	  const intersection = (a, b) => [
+	    Math.max(a[0], b[0]),
+	    Math.min(a[1], b[1]),
+	  ];
+
+	  const limits = distribution.split('-');
+
+	  const limitHandlers = {
+	    topmost: () => { y = intersection(y, [-0.5, 0]); },
+	    top: () => { y = intersection(y, [min, 0.6]); },
+	    bottom: () => { y = intersection(y, [0.4, max]); },
+	    left: () => { x = intersection(x, [min, 0.6]); },
+	    right: () => { x = intersection(x, [0.4, max]); },
+	    xcenter: () => { x = intersection(x, [0.25, 0.75]); },
+	    ycenter: () => { y = intersection(y, [0.25, 0.75]); },
+	    center: () => {
+	      x = intersection(x, [0.25, 0.75]);
+	      y = intersection(y, [0.25, 0.75]);
+	    },
+	    full: () => {
+	      x = intersection(x, [0, 1]);
+	      y = intersection(y, [0, 1]);
+	    },
+	  };
+
+	  for (const limit of limits) {
+	    if (limitHandlers[limit]) {
+	      limitHandlers[limit]();
+	    }
+	  }
+
+	  return { x, y };
+	}
+
+	// ============================================================================
+	// Polygon Generation
+	// ============================================================================
+
+	function distance2([x1, y1], [x2, y2]) {
+	  return (x2 - x1) ** 2 + (y2 - y1) ** 2;
+	}
+
+	class Polygon {
+	  constructor(count, gradientKey) {
+	    this.count = count;
+	    this.gradientKey = gradientKey;
+	    this.points = [];
+	    this.element = null;
+	    this.generatePoints();
+	  }
+
+	  generatePoints() {
+	    const limits = distributionToLimits(config.distribution);
+	    const { overflow, disturb, disturbChance } = DISTRIBUTION_SETTINGS;
+
+	    const randomBetween = ([a, b]) => Math.random() * (b - a) + a;
+
+	    const applyOverflow = (random, overflow) => {
+	      random = random * (1 + overflow * 2) - overflow;
+	      return Math.random() < disturbChance ? random + (Math.random() - 0.5) * disturb : random;
+	    };
+
+	    const newPoints = Array.from({ length: this.count }, () => [
+	      applyOverflow(randomBetween(limits.x), overflow),
+	      applyOverflow(randomBetween(limits.y), overflow),
+	    ]);
+
+	    if (this.points.length === 0) {
+	      this.points = newPoints;
+	    } else {
+	      const availableNewPoints = new Set(newPoints);
+	      this.points = this.points.map((oldPoint) => {
+	        let minDistance = Infinity;
+	        let closest = null;
+
+	        for (const newPoint of availableNewPoints) {
+	          const d = distance2(oldPoint, newPoint);
+	          if (d < minDistance) {
+	            minDistance = d;
+	            closest = newPoint;
+	          }
+	        }
+
+	        if (closest) availableNewPoints.delete(closest);
+	        return closest || oldPoint;
+	      });
+	    }
+	  }
+
+	  getPolygonString() {
+	    return this.points
+	      .map(([x, y]) => `${x * 100}% ${y * 100}%`)
+	      .join(', ');
+	  }
+
+	  createElement() {
+	    const div = document.createElement('div');
+	    div.className = 'glow-clip';
+	    div.id = 'glow-' + this.gradientKey;
+	    this.element = div;
+	    return div;
+	  }
+
+	  updateStyle() {
+	    if (!this.element) return;
     
+	    const gradient = GRADIENTS[this.gradientKey];
+	    const opacity = gradient.opacity !== undefined ? gradient.opacity : config.opacity;
+    
+	    this.element.style.clipPath = `polygon(${this.getPolygonString()})`;
+	    this.element.style.opacity = opacity;
+	    this.element.style.background = `linear-gradient(${gradient.direction}, ${gradient.from}, ${gradient.to})`;
+	  }
+
+	  regenerate() {
+	    this.generatePoints();
+	  }
+	}
+
+	// ============================================================================
+	// Helper Functions
+	// ============================================================================
+
+	function getFullPageHeight() {
+	  const body = document.body;
+	  const html = document.documentElement;
+	  return Math.max(
+	    body.scrollHeight, body.offsetHeight,
+	    html.clientHeight, html.scrollHeight, html.offsetHeight
+	  );
+	}
+
+	// ============================================================================
+	// Initialize and Create DOM Elements
+	// ============================================================================
+
+	var createGlowEffect = function() {
+	  // Create main container with absolute positioning
+	  const container = document.createElement('div');
+	  container.id = 'glow-container';
+  
+	  function updateContainerHeight() {
+	    const pageHeight = getFullPageHeight();
+	    container.style.cssText = `
+	      position: absolute;
+	      top: 0;
+	      left: 0;
+	      width: 100%;
+	      height: ${pageHeight}px;
+	      z-index: -1;
+	      overflow: hidden;
+	      pointer-events: none;
+	    `;
+	  }
+
+	  // Set initial height
+	  updateContainerHeight();
+
+	  // Create background wrapper
+	  const bgWrapper = document.createElement('div');
+	  bgWrapper.id = 'glow-bg-effect';
+	  bgWrapper.className = 'glow-bg';
+	  bgWrapper.setAttribute('aria-hidden', 'true');
+	  bgWrapper.style.cssText = `
+	    width: 100%;
+	    height: 100%;
+	    position: relative;
+	  `;
+
+	  // Add style for glow-clip elements
+	  const style = document.createElement('style');
+	  style.textContent = `
+	    .glow-clip {
+	      position: absolute;
+	      width: 100%;
+	      height: 100%;
+	      transition: clip-path ${ANIMATION.transitionDuration}s ease-in-out, 
+	                  opacity ${ANIMATION.transitionDuration}s ease-in-out;
+	    }
+	  `;
+	  document.head.appendChild(style);
+
+	  // Create polygons
+	  const polygons = {
+	    poly1: new Polygon(POLYGON_COUNTS.poly1, 'poly1'),
+	    poly2: new Polygon(POLYGON_COUNTS.poly2, 'poly2'),
+	    poly3: new Polygon(POLYGON_COUNTS.poly3, 'poly3'),
+	  };
+
+	  // Create and append polygon elements
+	  Object.values(polygons).forEach(poly => {
+	    bgWrapper.appendChild(poly.createElement());
+	  });
+
+	  // Append to container
+	  container.appendChild(bgWrapper);
+
+	  // Append to body
+	  document.body.appendChild(container);
+
+	  // Update all styles
+	  function updateAllPolygons() {
+	    Object.values(polygons).forEach(poly => poly.updateStyle());
+	    bgWrapper.style.filter = `blur(${ANIMATION.blur}px) hue-rotate(${config.hue}deg)`;
+	  }
+
+	  function regeneratePolygons() {
+	    Object.values(polygons).forEach(poly => poly.regenerate());
+	    updateAllPolygons();
+	  }
+
+	  // Initial render
+	  updateAllPolygons();
+
+	  // Update height on window resize and content changes
+	  window.addEventListener('resize', updateContainerHeight);
+  
+	  // Use ResizeObserver to detect content height changes
+	  if (typeof ResizeObserver !== 'undefined') {
+	    const resizeObserver = new ResizeObserver(() => {
+	      updateContainerHeight();
+	    });
+	    resizeObserver.observe(document.body);
+	  }
+
+	  // Fallback: periodically check for height changes
+	  setInterval(updateContainerHeight, 1000);
+
+	  // ============================================================================
+	  // Public API
+	  // ============================================================================
+
+	  window.glowEffect = {
+	    setDistribution(distribution) {
+	      config.distribution = distribution;
+	      regeneratePolygons();
+	    },
+	    setOpacity(opacity) {
+	      config.opacity = opacity;
+	      updateAllPolygons();
+	    },
+	    setHue(hue) {
+	      config.hue = hue;
+	      updateAllPolygons();
+	    },
+	    regenerate() {
+	      regeneratePolygons();
+	    },
+	    updateHeight() {
+	      updateContainerHeight();
+	    },
+	    startAutoRegenerate(interval = 5000) {
+	      this.autoRegenerateInterval = setInterval(() => {
+	        regeneratePolygons();
+	      }, interval);
+	    },
+	    stopAutoRegenerate() {
+	      if (this.autoRegenerateInterval) {
+	        clearInterval(this.autoRegenerateInterval);
+	      }
+	    }
+	  };
+	};
+
+	createGlowEffect();
+	</script>
+      
 <header>
     <h1>"""
                      f'{path_format}'
