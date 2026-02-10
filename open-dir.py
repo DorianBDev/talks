@@ -13,7 +13,7 @@ from urllib.parse import quote
 DEFAULT_OUTPUT_FILE = "index.html"
 
 EXCLUDE_DIR = [".github", ".git"]
-EXCLUDE_FILES = ["index.html", "open-dir.py"]
+EXCLUDE_FILES = ["index.html", "open-dir.py", ".gitattributes"]
 
 
 def process_dir(top_dir):
@@ -24,6 +24,9 @@ def process_dir(top_dir):
     index_file = None
 
     index_path = Path(path_top_dir, "index.html")
+
+    if index_path.exists():
+        return
 
     try:
         index_file = open(index_path, "w", encoding="utf-8")
