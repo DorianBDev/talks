@@ -5,20 +5,19 @@
 
 # This is a modified version of Josh's work
 
-import argparse
 import datetime
 import os
-import sys
 from pathlib import Path
 from urllib.parse import quote
 
-DEFAULT_OUTPUT_FILE = 'index.html'
+DEFAULT_OUTPUT_FILE = "index.html"
 
 EXCLUDE_DIR = [".github", ".git"]
 EXCLUDE_FILES = ["index.html", "open-dir.py"]
 
+
 def process_dir(top_dir):
-    glob_patt = '*'
+    glob_patt = "*"
 
     path_top_dir: Path
     path_top_dir = Path(top_dir)
@@ -27,9 +26,9 @@ def process_dir(top_dir):
     index_path = Path(path_top_dir, "index.html")
 
     try:
-        index_file = open(index_path, 'w', encoding='utf-8')
+        index_file = open(index_path, "w", encoding="utf-8")
     except Exception as e:
-        print('cannot create file %s %s' % (index_path, e))
+        print("cannot create file %s %s" % (index_path, e))
         return
 
     path_top_dir_parents = path_top_dir.parents
@@ -38,8 +37,9 @@ def process_dir(top_dir):
         if parent.name != "":
             path_format += f"/<a style='text-decoration: underline;' href='https://dorianb.net/talks/{parent}'>{parent.name}</a>"
     path_format += f"/<a style='text-decoration: underline;' href='https://dorianb.net/talks/{path_top_dir}'>{path_top_dir.name}</a>"
-    
-    index_file.write("""<!DOCTYPE html>
+
+    index_file.write(
+        """<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -147,12 +147,22 @@ def process_dir(top_dir):
     td:nth-child(2) {
         width: 80%;
     }
+    th:nth-child(3) {
+        text-align: center;
+    }
+    th:nth-child(4) {
+        text-align: center;
+    }
     td:nth-child(3) {
         padding: 0 20px 0 20px;
+        text-align: center;
     }
-    th:nth-child(4),
     td:nth-child(4) {
-        text-align: right;
+        padding: 0 20px 0 20px;
+        text-align: center;
+    }
+    th:nth-child(5),
+    td:nth-child(5) {
     }
     td:nth-child(2) svg {
         position: absolute;
@@ -239,6 +249,10 @@ def process_dir(top_dir):
                 </g>
                 <path d="M47.803141,294.093878 C48.4999811,295.177551 48.9495553,296.095918 49.4216083,296.995918 C50.1184484,297.895918 50.5680227,298.630612 51.2873415,299.365306 C52.2089688,300.44898 53.3778619,301 54.7490634,301 C56.1427436,301 57.0643709,300.632653 57.761211,299.916327 C58.4580511,299.365306 58.9076254,298.465306 58.9076254,297.381633 C58.9076254,296.830612 58.9076254,295.930612 58.6828382,294.828571 C58.4355724,293.561224 58.2107852,292.844898 58.2107852,292.477551 C57.7387323,287.757143 57.5139451,283.753061 57.5139451,279.95102 C57.5139451,273.228571 58.4355724,267.057143 59.8292526,261.602041 C61.44772,256.165306 63.5382403,251.610204 66.0783349,247.62449 C68.8656954,243.620408 72.3274172,240.35102 76.4859792,237.44898 C80.6445412,234.546939 85.2751561,232.177551 90.1305582,230.359184 C94.9859603,228.540816 100.76299,227.089796 107.236859,226.006122 C113.710728,225.087755 120.409385,224.371429 127.13052,223.820408 C133.829177,223.453061 141.247152,223.269388 149.811542,223.269388 L167.704598,223.269388 L167.704598,249.057143 C167.704598,250.87551 168.401438,252.326531 170.019905,253.593878 C171.86316,254.861224 173.728893,255.595918 176.021722,255.595918 C178.112242,255.595918 180.180284,254.861224 181.82123,253.593878 L247.751296,201.834694 C249.369763,200.567347 250.291391,199.116327 250.291391,197.297959 C250.291391,195.479592 249.369763,194.028571 247.751296,192.761224 L181.82123,141.002041 C180.202763,139.734694 178.112242,139 176.044201,139 C173.728893,139 171.885639,139.734694 170.042384,141.002041 C168.423917,142.269388 167.727077,143.720408 167.727077,145.538776 L167.727077,171.326531 L149.811542,171.326531 C88.5120908,171.326531 50.8152886,184.955102 36.9234437,212.193878 C32.3153075,221.267347 30,232.526531 30,245.971429 C30,257.046939 35.5522422,272.291837 46.4094607,291.540816 C46.6567266,292.091837 47.1063009,292.826531 47.803141,294.093878 Z" id="Shape-Copy" fill="#000000" fill-rule="nonzero" transform="translate(140.145695, 220.000000) scale(-1, 1) translate(-140.145695, -220.000000) "></path>
             </g>
+        </g>
+        <!-- Gitub -->
+        <g id="github">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="#696969"/>
         </g>
     </defs>
     </svg>
@@ -725,8 +739,8 @@ def process_dir(top_dir):
       
 <header>
     <h1>"""
-                     f'{path_format}'
-                     """</h1>
+        f"<a href='https://github.com/DorianBDev/talks/tree/main/'><svg width='1.5em' height='1em' version='1.1' viewBox='5 0 24 24'><use xlink:href='#github'></use></svg></a> {path_format}"
+        f"""</h1>
                  </header>
                  <main>
                  <div class="listing">
@@ -735,11 +749,10 @@ def process_dir(top_dir):
                          <tr>
                              <th></th>
                              <th>Name</th>
+                             <th>Links</th>
                              <th>Size</th>
-                             <th class="hideable">
-                                 Modified
-                             </th>
-                             <th class="hideable"></th>
+                             <th>Modified</th>
+                             <th></th>
                          </tr>
                          </thead>
                          <tbody>
@@ -747,19 +760,23 @@ def process_dir(top_dir):
                              <td></td>
                              <td><a href=".."><svg width="1.5em" height="1em" version="1.1" viewBox="0 0 24 24"><use xlink:href="#go-up"></use></svg>
                  <span class="goup">..</span></a></td>
+                             <td><a href="https://github.com/DorianBDev/talks/tree/main/{path_top_dir}"><svg width="1.5em" height="1em" version="1.1" viewBox="0 0 24 24"><use xlink:href="#github"></use></svg></a></td>
                              <td>&mdash;</td>
-                             <td class="hideable">&mdash;</td>
-                             <td class="hideable"></td>
+                             <td>&mdash;</td>
+                             <td></td>
                          </tr>
-                 """)
+                 """
+    )
 
     # sort dirs first
-    sorted_entries = sorted(path_top_dir.glob(glob_patt), key=lambda p: (p.is_file(), p.name))
+    sorted_entries = sorted(
+        path_top_dir.glob(glob_patt), key=lambda p: (p.is_file(), p.name)
+    )
 
     entry: Path
     for entry in sorted_entries:
 
-        if entry.is_dir() and not entry.name.lower() in EXCLUDE_DIR:
+        if entry.is_dir() and entry.name.lower() not in EXCLUDE_DIR:
             print(f"{entry.name.lower()}")
             process_dir(entry)
 
@@ -770,48 +787,53 @@ def process_dir(top_dir):
 
         # From Python 3.6, os.access() accepts path-like objects
         if (not entry.is_symlink()) and not os.access(str(entry), os.W_OK):
-            print(f"*** WARNING *** entry {entry.absolute()} is not writable! SKIPPING!")
+            print(
+                f"*** WARNING *** entry {entry.absolute()} is not writable! SKIPPING!"
+            )
             continue
 
         size_bytes = -1  ## is a folder
-        size_pretty = '&mdash;'
-        last_modified = '-'
-        last_modified_human_readable = '-'
-        last_modified_iso = ''
+        size_pretty = "&mdash;"
+        last_modified = "-"
+        last_modified_human_readable = "-"
+        last_modified_iso = ""
         try:
             if entry.is_file():
                 size_bytes = entry.stat().st_size
                 size_pretty = pretty_size(size_bytes)
 
             if entry.is_dir() or entry.is_file():
-                last_modified = datetime.datetime.fromtimestamp(entry.stat().st_mtime).replace(microsecond=0)
+                last_modified = datetime.datetime.fromtimestamp(
+                    entry.stat().st_mtime
+                ).replace(microsecond=0)
                 last_modified_iso = last_modified.isoformat()
                 last_modified_human_readable = last_modified.strftime("%c")
 
         except Exception as e:
-            print('ERROR accessing file name:', e, entry)
+            print("ERROR accessing file name:", e, entry)
             continue
 
         entry_path = str(entry.name)
 
         if entry.is_dir() and not entry.is_symlink():
-            entry_type = 'folder'
-            if os.name not in ('nt',):
+            entry_type = "folder"
+            if os.name not in ("nt",):
                 # append trailing slash to dirs, unless it's windows
-                entry_path = os.path.join(entry.name, '')
+                entry_path = os.path.join(entry.name, "")
 
         elif entry.is_dir() and entry.is_symlink():
-            entry_type = 'folder-shortcut'
-            print('dir-symlink', entry.absolute())
+            entry_type = "folder-shortcut"
+            print("dir-symlink", entry.absolute())
 
         elif entry.is_file() and entry.is_symlink():
-            entry_type = 'file-shortcut'
-            print('file-symlink', entry.absolute())
+            entry_type = "file-shortcut"
+            print("file-symlink", entry.absolute())
 
         else:
-            entry_type = 'file'
+            entry_type = "file"
 
-        index_file.write(f"""
+        index_file.write(
+            f"""
         <tr class="file">
             <td></td>
             <td>
@@ -820,31 +842,35 @@ def process_dir(top_dir):
                     <span class="name">{entry.name}</span>
                 </a>
             </td>
+            <td><a href="https://github.com/DorianBDev/talks/tree/main/{path_top_dir}/{entry_path}"><svg width="1.5em" height="1em" version="1.1" viewBox="0 0 24 24"><use xlink:href="#github"></use></svg></a></td>
             <td data-order="{size_bytes}">{size_pretty}</td>
-            <td class="hideable"><time datetime="{last_modified_iso}">{last_modified_human_readable}</time></td>
-            <td class="hideable"></td>
+            <td><time datetime="{last_modified_iso}">{last_modified_human_readable}</time></td>
+            <td></td>
         </tr>
-""")
+"""
+        )
 
-    index_file.write("""
+    index_file.write(
+        """
             </tbody>
         </table>
     </div>
 </main>
 </body>
-</html>""")
+</html>"""
+    )
     if index_file:
         index_file.close()
 
 
 # bytes pretty-printing
 UNITS_MAPPING = [
-    (1024 ** 5, ' PB'),
-    (1024 ** 4, ' TB'),
-    (1024 ** 3, ' GB'),
-    (1024 ** 2, ' MB'),
-    (1024 ** 1, ' KB'),
-    (1024 ** 0, (' byte', ' bytes')),
+    (1024**5, " PB"),
+    (1024**4, " TB"),
+    (1024**3, " GB"),
+    (1024**2, " MB"),
+    (1024**1, " KB"),
+    (1024**0, (" byte", " bytes")),
 ]
 
 
