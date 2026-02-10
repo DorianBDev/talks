@@ -1,1 +1,3 @@
-const s="/talks/OAI2026/Full/assets/PIRAT-DU4hOTYb.png",t="/talks/OAI2026/Full/assets/cs-Cgj7z0qc.png",a="/talks/OAI2026/Full/assets/lhs_blanc-LK2sImAm.png",l="/talks/OAI2026/Full/assets/INRIA-Ci7cjCyI.png",_="/talks/OAI2026/Full/assets/irisa-BIK9fOiz.png";export{s as _,t as a,a as b,l as c,_ as d};
+version https://git-lfs.github.com/spec/v1
+oid sha256:72f202e35e3c2445986f0f0c4ef3ad1b8e66faff39008be04880dc0d2bf79007
+size 301

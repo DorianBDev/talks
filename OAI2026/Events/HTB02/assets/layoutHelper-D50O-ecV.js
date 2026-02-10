@@ -1,1 +1,3 @@
-function o(e){return e.startsWith("/")?"/talks/OAI2026/Events/HTB02/"+e.slice(1):e}function n(e,i=!1){const t=e&&(e[0]==="#"||e.startsWith("rgb")),r={background:t?e:void 0,color:e&&!t?"white":void 0,backgroundImage:t?void 0:e?i?`linear-gradient(#0005, #0008), url(${o(e)})`:`url("${o(e)}")`:void 0,backgroundRepeat:"no-repeat",backgroundPosition:"center",backgroundSize:"cover"};return r.background||delete r.background,r}export{n as h};
+version https://git-lfs.github.com/spec/v1
+oid sha256:44e28c27630cb6c34c2104ea323d391b256e480f50537dc236e36a57af0f84f1
+size 438
